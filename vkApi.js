@@ -11,17 +11,22 @@ const searchMusic = async (query) => {
             },
         });
 
+        console.log(response.data); // Выводим полный ответ для отладки
+
+        if (!response.data || !response.data.response) {
+            throw new Error('Неверный ответ от VK API');
+        }
+
         const tracks = response.data.response.items;
-        if (tracks.length > 0) {
+        if (tracks && tracks.length > 0) {
             const track = tracks[0];
             return `Нашел трек: ${track.artist} - ${track.title}. Слушайте: ${track.url}`;
         } else {
-            return 'К сожалению, я не нашел ничего по вашему запросу.';
+            return 'К сожалению, я не нашла ничего по вашему запросу.';
         }
     } catch (error) {
-        console.error('Ошибка при поиске музыки:', error);
-        return 'Произошла ошибка при поиске музыки.';
-    }
+        console.error('Ошибка при поиске музыки:', error.message);
+        return 'Произошла ошибка при поиске музыки.';}
 };
 
 module.exports = { searchMusic };
